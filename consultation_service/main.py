@@ -26,15 +26,30 @@ class Server(BaseHTTPRequestHandler):
                 }
             ), None
         elif self.path.split("?")[0] == "/property":
-            # filters = self.path.split("?")
-            # filters.pop(0)
-            response, error = PropertyController.get_properties()
+            filters = self.path.split("?")
+            filters.pop(0)
+            if len(filters) > 0:
+                filters = Server.convert_filters_to_dict(filters)
+                response, error = PropertyController.get_properties(**filters)
+            else:
+                response, error = PropertyController.get_properties()
         self._set_headers()
         self.wfile.write(
             bytes(
                 response if response else "", 'utf-8'
             )
         )
+
+    @classmethod
+    def convert_filters_to_dict(cls, filters):
+        dict_filters = {}
+        for i in filters:
+            temp_list_filter = i.split("=")
+            value = temp_list_filter[1]
+            if value.isdigit():
+                value = float(value)
+            dict_filters[temp_list_filter[0]] = temp_list_filter[1]
+        return dict_filters
 
 
 def run(server_class=HTTPServer, handler_class=Server, port=8008):

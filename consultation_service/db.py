@@ -63,5 +63,13 @@ class DBHelper:
             count += 1
         query_sentence += ";"
         cursor.execute(query_sentence)
-        result = cursor.fetchall()
-        return result
+        results = cursor.fetchall()
+        list_dict_results = []
+        for result in results:
+            list_dict_results.append(
+                {
+                    entity.fields[i]: result[i] if not isinstance(result[i], datetime.datetime) else str(result[i]) for i in range(len(result))
+                }
+            )
+        list_object_to_return = [entity(**result) for result in list_dict_results]
+        return list_object_to_return

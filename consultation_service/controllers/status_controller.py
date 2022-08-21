@@ -12,16 +12,15 @@ class StatusController:
 
     @classmethod
     @cached(cache)
-    def get_name_status_by_id(cls, id):
+    def get_name_status_by_id(cls, id_):
         status_by_id = None
         cursor = MySqlConnection.get_cursor()
         try:
-            id = int(id)
-            status_by_id = DBHelper.get_by_filter(cursor, Status, **{"id": id})
+            id_ = int(id_)
+            status_by_id = DBHelper.get_by_filter(cursor, Status, **{"id": id_})
             status_by_id = status_by_id[0]
-            print(f"id: {id} value: {status_by_id}")
         except Exception as e:
             print(e)
         finally:
             cursor.close()
-        return status_by_id[1] or ""
+        return status_by_id.name if status_by_id else ""

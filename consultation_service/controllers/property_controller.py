@@ -12,22 +12,27 @@ class PropertyController:
         error = None
         response = None
         cursor = MySqlConnection.get_cursor()
-        # try:
-        # TODO: consulta cuando hay filtros y cuando no, todas dos se realizaran por este medio
-        list_properties = DBHelper.get_all(cursor, Property)
+        filter_by_state = "state" in kwargs.keys()
+        if filter_by_state:
+            state_to_filter = kwargs["state"]
+            del kwargs["state"]
+        print(kwargs)
+        if len(kwargs) > 0:
+            list_properties = DBHelper.get_by_filter(cursor, Property, **kwargs)
+        else:
+            list_properties = DBHelper.get_all(cursor, Property)
         cls.add_actually_status(list_properties)
+        if filter_by_state:
+            list_properties = cls.filter_by_status_valid_to_show(list_properties, [state_to_filter,])
         list_properties = cls.filter_by_status_valid_to_show(list_properties)
+        data_to_return = [obj.__dict__ for obj in list_properties]
         response = json.dumps(
             {
                 "msg": "Query completed successfully",
-                "data": [obj.__dict__ for obj in list_properties]
+                "count": len(data_to_return),
+                "data": data_to_return
             }
         )
-        # except Exception as e:
-        #     error = True
-        #     print(e)
-        # finally:
-        #     cursor.close()
         return response, error
 
     @classmethod
@@ -53,12 +58,14 @@ class PropertyController:
                 prop.status = None
 
     @classmethod
-    def filter_by_status_valid_to_show(cls, list_properties):
-        valid_states = [
+    def filter_by_status_valid_to_show(
+        cls, list_properties,
+        valid_states=[
             "en_venta",
             "pre_venta",
             "vendido"
         ]
+    ):
         def filter_by_states(obj, valid_states=valid_states):
             return obj.status in valid_states
         list_properties = [element for element in filter(filter_by_states, list_properties)]

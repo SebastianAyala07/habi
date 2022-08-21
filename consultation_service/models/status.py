@@ -1,10 +1,7 @@
-
 class Status:
 
     db_name = "status"
-    fields = [
-        "id", "name", "label"
-    ]
+    fields = ["id", "name", "label"]
 
     id_: int
     name: str

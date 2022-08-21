@@ -4,7 +4,6 @@ import json
 
 
 class StatusHistoryController:
-
     @classmethod
     def get_status_history_lines(cls, **kwargs):
         error = None
@@ -15,7 +14,7 @@ class StatusHistoryController:
             response = json.dumps(
                 {
                     "msg": "Query completed successfully",
-                    "data": [obj.__dict__ for obj in list_status_history_lines]
+                    "data": [obj.__dict__ for obj in list_status_history_lines],
                 }
             )
         except Exception as e:

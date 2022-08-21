@@ -1,11 +1,7 @@
-
 class StatusHistory:
 
     db_name = "status_history"
-    fields = [
-        "id", "property_id",
-        "status_id", "update_date"
-    ]
+    fields = ["id", "property_id", "status_id", "update_date"]
 
     id_: int
     property_id: int

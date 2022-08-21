@@ -11,9 +11,11 @@ class MySqlConnection:
     def get_conection_instance(cls):
         if not cls.connection or not cls.connection.is_connected():
             cls.connection = connector.connect(
-                user=os.getenv("USER_DB"), password=os.getenv("PASSWORD_DB"),
-                host=os.getenv("HOST_DB"), database=os.getenv("NAME_DB"),
-                port=os.getenv("PORT_DB")
+                user=os.getenv("USER_DB"),
+                password=os.getenv("PASSWORD_DB"),
+                host=os.getenv("HOST_DB"),
+                database=os.getenv("NAME_DB"),
+                port=os.getenv("PORT_DB"),
             )
         return cls.connection
 
@@ -42,7 +44,10 @@ class DBHelper:
         for result in results:
             list_dict_results.append(
                 {
-                    entity.fields[i]: result[i] if not isinstance(result[i], datetime.datetime) else str(result[i]) for i in range(len(result))
+                    entity.fields[i]: result[i]
+                    if not isinstance(result[i], datetime.datetime)
+                    else str(result[i])
+                    for i in range(len(result))
                 }
             )
         list_object_to_return = [entity(**result) for result in list_dict_results]
@@ -68,7 +73,10 @@ class DBHelper:
         for result in results:
             list_dict_results.append(
                 {
-                    entity.fields[i]: result[i] if not isinstance(result[i], datetime.datetime) else str(result[i]) for i in range(len(result))
+                    entity.fields[i]: result[i]
+                    if not isinstance(result[i], datetime.datetime)
+                    else str(result[i])
+                    for i in range(len(result))
                 }
             )
         list_object_to_return = [entity(**result) for result in list_dict_results]

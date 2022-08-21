@@ -9,7 +9,6 @@ cache = TTLCache(maxsize=100, ttl=timedelta(minutes=10), timer=datetime.now)
 
 
 class StatusController:
-
     @classmethod
     @cached(cache)
     def get_name_status_by_id(cls, id_):

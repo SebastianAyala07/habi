@@ -1,12 +1,7 @@
-
 class Property(object):
 
     db_name = "property"
-    fields = [
-        "id", "address",
-        "city", "price",
-        "description", "year"
-    ]
+    fields = ["id", "address", "city", "price", "description", "year"]
 
     id_: int
     address: str

@@ -28,13 +28,21 @@ class Server(BaseHTTPRequestHandler):
                 None,
             )
         elif self.path.split("?")[0] == "/property":
-            filters = self.path.split("?")
-            filters.pop(0)
-            if len(filters) > 0:
-                filters = Server.convert_filters_to_dict(filters)
-                response, error = PropertyController.get_properties(**filters)
-            else:
-                response, error = PropertyController.get_properties()
+            try:
+                filters = self.path.split("?")
+                filters.pop(0)
+                if len(filters) > 0:
+                    filters = Server.convert_filters_to_dict(filters)
+                    response, error = PropertyController.get_properties(**filters)
+                else:
+                    response, error = PropertyController.get_properties()
+            except Exception as e:
+                response = json.dumps(
+                    {
+                        "msg": "An error has occurred",
+                        "error detail": f"{e}"
+                    }
+                )
         self._set_headers()
         self.wfile.write(bytes(response if response else "", "utf-8"))
 
